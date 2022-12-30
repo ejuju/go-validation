@@ -8,10 +8,14 @@ func main() {
 	age := -2
 
 	err := validation.CheckAll(
-		validation.Check("email is valid",
+		validation.Check("user data is valid",
 			validation.IsEmailAddress(emailAddr),
 			validation.IsPhoneNumber(phoneNumber),
 			validation.IntIsAboveMin(age, 0, "age"),
+		),
+		validation.Check("some other checks",
+			validation.IsLongerThanString("i'm short", 10),
+			validation.IntIsBelowMax(0, 10, "some number"),
 		),
 	)
 	if err != nil {
