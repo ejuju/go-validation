@@ -1,14 +1,14 @@
 package validation
 
-import "fmt"
+import (
+	"errors"
+	"net/mail"
+)
 
-type CheckFunc func() error
-
-func Check(id string, checks ...CheckFunc) error {
-	for _, checkfn := range checks {
-		err := checkfn()
-		if err != nil {
-			return fmt.Errorf("%q validation failed: %w", id, err)
+func Check(errmsg string, checks ...bool) error {
+	for _, c := range checks {
+		if !c {
+			return errors.New(errmsg)
 		}
 	}
 	return nil
@@ -21,4 +21,21 @@ func CheckAll(errs ...error) error {
 		}
 	}
 	return nil
+}
+
+func IsEmailAddressString(in string) bool {
+	_, err := mail.ParseAddress(in)
+	return err == nil
+}
+
+func IsEmailAddressStringSlice(in []string) bool {
+	if len(in) == 0 {
+		return false
+	}
+	for _, emailaddr := range in {
+		if !IsEmailAddressString(emailaddr) {
+			return false
+		}
+	}
+	return true
 }

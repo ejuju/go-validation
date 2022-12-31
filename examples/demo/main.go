@@ -1,21 +1,24 @@
 package main
 
-import "github.com/ejuju/go-validation"
+import (
+	"fmt"
+
+	"github.com/ejuju/go-validation"
+)
 
 func main() {
 	emailAddr := "hehe@.fr"
-	phoneNumber := "06 112 ss"
 	age := -2
 
 	err := validation.CheckAll(
-		validation.Check("user data is valid",
-			validation.IsEmailAddress(emailAddr),
-			validation.IsPhoneNumber(phoneNumber),
-			validation.IntIsAboveMin(age, 0, "age"),
+		validation.Check(
+			fmt.Sprintf("invalid email address: %s", emailAddr),
+			validation.IsEmailAddressString(emailAddr),
 		),
-		validation.Check("some other checks",
-			validation.IsLongerThanString("i'm short", 10),
-			validation.IntIsBelowMax(0, 10, "some number"),
+		validation.Check(
+			fmt.Sprintf("age %d is not within 0 and 150", age),
+			age >= 0,
+			age <= 150,
 		),
 	)
 	if err != nil {
