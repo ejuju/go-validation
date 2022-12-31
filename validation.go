@@ -23,19 +23,7 @@ func CheckAll(errs ...error) error {
 	return nil
 }
 
-func IsEmailAddressString(in string) bool {
+func IsEmailAddr(in string) bool {
 	_, err := mail.ParseAddress(in)
 	return err == nil
-}
-
-func IsEmailAddressStringSlice(in []string) bool {
-	if len(in) == 0 {
-		return false
-	}
-	for _, emailaddr := range in {
-		if !IsEmailAddressString(emailaddr) {
-			return false
-		}
-	}
-	return true
 }
