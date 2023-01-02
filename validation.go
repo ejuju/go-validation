@@ -1,25 +1,24 @@
 package validation
 
 import (
-	"errors"
 	"fmt"
 	"net/mail"
 	"unicode/utf8"
 )
 
 func Check(errmsg string, checks ...bool) error {
-	for _, c := range checks {
+	for i, c := range checks {
 		if !c {
-			return errors.New(errmsg)
+			return fmt.Errorf("at check %d: %s", i, errmsg)
 		}
 	}
 	return nil
 }
 
 func CheckAll(errs ...error) error {
-	for _, err := range errs {
+	for i, err := range errs {
 		if err != nil {
-			return err
+			return fmt.Errorf("at index %d: %w", i, err)
 		}
 	}
 	return nil
